@@ -73,12 +73,9 @@ pub fn main() !void {
                     }
                     prev_value = current;
                     index += 1;
-
-                    try bw.flush();
                 }
                 if (!violated) {
                     safe_reports_part2 += 1;
-                    try bw.flush();
                     break;
                 }
             }
