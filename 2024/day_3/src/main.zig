@@ -19,8 +19,8 @@ fn solution_part2() u32 {
     var dos = std.mem.tokenizeSequence(u8, input, "do()");
     var result: u32 = 0;
     while (dos.next()) |do| {
-        var donts = std.mem.tokenizeSequence(u8, do, "don't()");
-        var instructions = std.mem.tokenizeSequence(u8, donts.next().?, "mul(");
+        var donts = std.mem.splitSequence(u8, do, "don't()");
+        var instructions = std.mem.tokenizeSequence(u8, donts.first(), "mul(");
         while (instructions.next()) |instruction| {
             var numbers = std.mem.tokenizeScalar(u8, instruction, ',');
             const a = std.fmt.parseInt(u32, numbers.next().?, 10) catch continue;
