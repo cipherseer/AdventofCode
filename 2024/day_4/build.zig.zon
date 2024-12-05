@@ -1,0 +1,10 @@
+.{
+    .name = "day_4",
+    .version = "0.0.0",
+    .dependencies = .{ .ndarray = .{ .url = "https://github.com/pblischak/zig-ndarray/archive/a4cd1e229daaf4f0d81a1c34d469476000e898fa.zip", .hash = "1220c6de27aa3a3353b22650fe8fafddc8d95d6441a993e98bf2b23d97a085ad9d2e" } },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
