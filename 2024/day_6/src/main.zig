@@ -39,6 +39,7 @@ const Guard = struct {
             } else {
                 try previous_states.put(self.*, {});
             }
+
             switch (self.direction) {
                 .Left => {
                     if (self.position.col >= 1) {
@@ -126,7 +127,6 @@ pub fn main() !void {
     var positions = std.AutoHashMap(Position, void).init(allocator);
     defer positions.deinit();
     var previous_states = std.AutoHashMap(Guard, void).init(allocator);
-    try previous_states.ensureTotalCapacity(4 * @as(u32, @intCast(rows)) * @as(u32, @intCast(cols)));
     defer previous_states.deinit();
 
     _ = try guard.patrol(&tiles, &positions, &previous_states, true);
