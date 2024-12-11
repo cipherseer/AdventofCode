@@ -8,7 +8,39 @@ const Position = struct {
     x: usize,
 };
 
-fn find_pinnacles(map: *ndarray.Matrix(u8), start: Position, stack: *std.ArrayList(Position), visited: *std.AutoHashMap(Position, void)) !struct { usize, usize } {
+fn find_pinnacles(map: *ndarray.Matrix(u8), height: u8, p: Position, count: *usize, rating: *usize, pinnacles: *std.AutoHashMap(Position, void)) !void {
+    const rows = map.shape[0] - 1;
+    const cols = map.shape[1] - 1;
+
+    if (height == 9) {
+        if (!pinnacles.contains(p)) {
+            count.* += 1;
+            try pinnacles.put(p, {});
+        }
+        rating.* += 1;
+        return;
+    }
+    const h = height + 1;
+
+    if (p.y > 0 and map.at(.{ p.y - 1, p.x }) == h) {
+        try find_pinnacles(map, h, .{ .y = p.y - 1, .x = p.x }, count, rating, pinnacles);
+    }
+
+    if (p.y < rows and map.at(.{ p.y + 1, p.x }) == h) {
+        try find_pinnacles(map, h, .{ .y = p.y + 1, .x = p.x }, count, rating, pinnacles);
+    }
+
+    if (p.x > 0 and map.at(.{ p.y, p.x - 1 }) == h) {
+        try find_pinnacles(map, h, .{ .y = p.y, .x = p.x - 1 }, count, rating, pinnacles);
+    }
+
+    if (p.x < cols and map.at(.{ p.y, p.x + 1 }) == h) {
+        try find_pinnacles(map, h, .{ .y = p.y, .x = p.x + 1 }, count, rating, pinnacles);
+    }
+}
+
+//strangely slightly slower than recursive solution
+fn find_pinnacles_iter(map: *ndarray.Matrix(u8), start: Position, stack: *std.ArrayList(Position), visited: *std.AutoHashMap(Position, void)) !struct { usize, usize } {
     const rows = map.shape[0];
     const cols = map.shape[1];
 
@@ -44,10 +76,6 @@ pub fn main() !void {
         _ = gpa.deinit();
     }
 
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    defer arena.deinit();
-    const arena_allocator = arena.allocator();
-
     const stdout_file = std.io.getStdOut().writer();
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
@@ -71,16 +99,16 @@ pub fn main() !void {
         }
     }
 
+    var pinnacles = std.AutoHashMap(Position, void).init(allocator);
+    defer pinnacles.deinit();
     var result: usize = 0;
     var result2: usize = 0;
-    var stack = std.ArrayList(Position).init(arena_allocator);
-    var visited = std.AutoHashMap(Position, void).init(arena_allocator);
     for (trailheads.items) |trailhead| {
-        defer {
-            stack.clearRetainingCapacity();
-            visited.clearRetainingCapacity();
-        }
-        const count, const rating = try find_pinnacles(&map, trailhead, &stack, &visited);
+        defer pinnacles.clearRetainingCapacity();
+        var count: usize = 0;
+        var rating: usize = 0;
+        // std.debug.print("counting pinnacles connected to trailhead at {}-{}\n", .{ trailhead.y, trailhead.x });
+        try find_pinnacles(&map, 0, trailhead, &count, &rating, &pinnacles);
         result += count;
         result2 += rating;
     }
