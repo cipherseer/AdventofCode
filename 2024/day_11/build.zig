@@ -16,7 +16,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .ReleaseFast });
 
     const exe = b.addExecutable(.{
-        .name = "day_10",
+        .name = "day_11",
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
@@ -26,14 +26,6 @@ pub fn build(b: *std.Build) void {
     // standard location when the user invokes the "install" step (the default
     // step when running `zig build`).
     b.installArtifact(exe);
-
-    const ndarray_dep = b.dependency("ndarray", .{
-        .target = target,
-        .optimize = optimize,
-    });
-
-    const ndarray_module = ndarray_dep.module("ndarray");
-    exe.root_module.addImport("ndarray", ndarray_module);
 
     // This *creates* a Run step in the build graph, to be executed when another
     // step is evaluated that depends on it. The next line below will establish
