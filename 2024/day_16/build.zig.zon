@@ -1,0 +1,19 @@
+.{
+    .name = "day_16",
+    .version = "0.0.0",
+    .dependencies = .{
+        .ndarray = .{
+            .url = "git+https://github.com/pblischak/zig-ndarray?ref=main#a4cd1e229daaf4f0d81a1c34d469476000e898fa",
+            .hash = "1220c6de27aa3a3353b22650fe8fafddc8d95d6441a993e98bf2b23d97a085ad9d2e",
+        },
+        .@"zig-deque" = .{
+            .url = "git+https://github.com/magurotuna/zig-deque?ref=main#d6e16d02bb7be925468dea172567c41c9a5f4bfc",
+            .hash = "1220d1bedf7d5cfc7475842b3d4e8f03f1308be2e724a036677cceb5c4db13c3da3d",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
