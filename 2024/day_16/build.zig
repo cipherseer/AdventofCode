@@ -35,13 +35,6 @@ pub fn build(b: *std.Build) void {
     const ndarray_module = ndarray_dep.module("ndarray");
     exe.root_module.addImport("ndarray", ndarray_module);
 
-    const deque_dep = b.dependency("zig-deque", .{
-        .target = target,
-        .optimize = optimize,
-    });
-
-    const deque_module = deque_dep.module("zig-deque");
-    exe.root_module.addImport("zig-deque", deque_module);
     // This *creates* a Run step in the build graph, to be executed when another
     // step is evaluated that depends on it. The next line below will establish
     // such a dependency.
