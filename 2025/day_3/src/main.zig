@@ -14,17 +14,11 @@ pub fn main() !void {
         @memcpy(sequence[0..], line[0..2]);
         for (1..line.len-1) |i| {
             const next = line[i..i+2];
-            var update: ?usize = null;
-
             inline for (0..sequence.len) |j| {
                 if (next[j] > sequence[j]) {
-                    update = j;
+                    @memcpy(sequence[j..], next[j..]);
                     break;
                 }
-            }
-    
-            if (update) |k| {
-                @memcpy(sequence[k..], next[k..]);
             }
 
         }
@@ -41,17 +35,12 @@ pub fn main() !void {
 
         for (1..line.len-11) |i| {
             const next = line[i..i+12];
-            var update: ?usize = null;
 
             inline for (0..sequence.len) |j| {
                 if (next[j] > sequence[j]) {
-                    update = j;
+                    @memcpy(sequence[j..], next[j..]);
                     break;
                 }
-            }
-    
-            if (update) |k| {
-                @memcpy(sequence[k..], next[k..]);
             }
         }
 
