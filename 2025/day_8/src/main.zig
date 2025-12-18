@@ -8,22 +8,22 @@ const Coords = struct {
     z: isize,
 };
 
-const CoordPair = struct {
+const Edge = struct {
     a_index: usize,
     b_index: usize,
 };
 
-fn squared_distance(c: CoordPair, coords: []const Coords) isize {
-    const a = coords[c.a_index];
-    const b = coords[c.b_index];
+fn squared_distance(e: Edge, coords: []const Coords) isize {
+    const a = coords[e.a_index];
+    const b = coords[e.b_index];
     const dx = a.x-b.x;
     const dy = a.y-b.y;
     const dz = a.z-b.z;
     return dx*dx+dy*dy+dz*dz;
 }
 
-fn min_squared_distance(coords: []const Coords, c1: CoordPair, c2: CoordPair) std.math.Order {
-    return std.math.order(squared_distance(c1,coords), squared_distance(c2,coords));
+fn min_squared_distance(coords: []const Coords, e1: Edge, e2: Edge) std.math.Order {
+    return std.math.order(squared_distance(e1,coords), squared_distance(e2,coords));
 }
 
 const DisjointSet = struct {
@@ -95,7 +95,7 @@ pub fn main() !void {
         try coords.append(allocator, .{.x=x,.y=y,.z=z});
     }
     
-    var edge_queue = std.PriorityQueue(CoordPair,[]const Coords, min_squared_distance)
+    var edge_queue = std.PriorityQueue(Edge,[]const Coords, min_squared_distance)
                                     .init(allocator, coords.items);
     defer edge_queue.deinit();
 
